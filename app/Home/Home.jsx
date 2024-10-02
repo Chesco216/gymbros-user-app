@@ -3,13 +3,13 @@ import { useUser } from "../../store/useUser"
 
 export const Home = () => {
 
-  const user = useUser(state => state.user)
+	const user = useUser(state => state.user)
 
-  return (
-    <View>
-      <Text>{user.name}</Text>
-      <Text>{user.email}</Text>
-      <Text>{JSON.stringify(user.isActive)}</Text>
-    </View>
-  )
+	return (
+		<View>
+			<Text>{user.name}</Text>
+			<Text>{user.email}</Text>
+			<Text>{JSON.stringify(user.isActive)}</Text>
+		</View>
+	)
 }
