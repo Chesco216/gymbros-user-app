@@ -4,6 +4,9 @@ import { Login } from './app/Auth/Login';
 import { StatusBar } from 'react-native';
 import { Home } from './app/Home/Home';
 import { Signup } from './app/Auth/Signup';
+import { Profile } from './app/Profile/Profile';
+import { Routines } from './app/Routines/Routines';
+import { Advices } from './app/Advices/Advices';
 
 export default function App() {
 
@@ -16,6 +19,9 @@ export default function App() {
           <Stack.Screen name='Signup' component={Signup}/>
           <Stack.Screen name='Login' component={Login}/>
           <Stack.Screen name='Home' component={Home}/>
+          <Stack.Screen name='Profile' component={Profile}/>
+          <Stack.Screen name='Routines' component={Routines}/>
+          <Stack.Screen name='Advices' component={Advices}/>
         </Stack.Navigator>
       </NavigationContainer>
       <StatusBar style='auto'/>

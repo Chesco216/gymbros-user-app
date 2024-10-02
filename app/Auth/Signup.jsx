@@ -1,70 +1,84 @@
-
-
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { login, signup } from './sevices/auth';
+import { signup } from './sevices/auth';
 import { useUser } from '../../store/useUser';
+import { UserForm } from './components/UserForm';
 
 export const Signup = ({navigation}) => {
 
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [pass, setPass] = useState()
+  const [submited, setSubmited] = useState(false)
 
+  // const user = useUser(state => state.user)
+  // if (user.uid) navigation.navigate('Home')
+ 
   const setUser = useUser(state => state.set_User)
 
+  const nav = navigation
   const handleLogin = async() => {
     const user = await signup(email, pass)
+    console.log(user.uid)
     setUser({
-      user: name,
+      uid: user.uid,
+      name: name,
       email: user.email,
       isActive: false
     })
 
     console.log({user})
-    navigation.navigate('Home')
+    setSubmited(true)
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenido de vuelta!</Text>
-      <Text style={styles.inTitle}>Ingresa tu Nombre</Text>
-      <TextInput
-        style={styles.inp}
-        placeholder='nombre'
-        value={name}
-        onChangeText={text => setName(text)}
-      />
-      <Text style={styles.inTitle}>Ingresa tu correo</Text>
-      <TextInput
-        style={styles.inp}
-        placeholder='ejemplo@gmail.com'
-        value={email}
-        onChangeText={text => setEmail(text)}
-      />
-      <Text style={styles.inTitle}>Ingresa tu contraseña</Text>
-      <TextInput
-        style={styles.inp}
-        placeholder='contraseña'
-        value={pass}
-        onChangeText={text => setPass(text)}
-      />
+      {
+        submited ? 
+          <UserForm nav={nav}/>
+          : (
+            <>
+              <Text style={styles.title}>Bienvenido a Gymbros!</Text>
+              <Text style={styles.inTitle}>Ingresa tu Nombre</Text>
+              <TextInput
+                style={styles.inp}
+                placeholder='nombre'
+                value={name}
+                onChangeText={text => setName(text)}
+              />
+              <Text style={styles.inTitle}>Ingresa tu correo</Text>
+              <TextInput
+                style={styles.inp}
+                placeholder='ejemplo@gmail.com'
+                value={email}
+                onChangeText={text => setEmail(text)}
+              />
+              <Text style={styles.inTitle}>Ingresa tu contraseña</Text>
+              <TextInput
+                style={styles.inp}
+                placeholder='contraseña'
+                value={pass}
+                onChangeText={text => setPass(text)}
+              />
 
-      <Text style={styles.redirect}>
-        Ya tienes una cuenta? {`${' '}`}
-        <Text 
-          style={styles.redirectStrong}
-          onPress={() => navigation.navigate('Login')}
-        >
-          iniciar sesion
-        </Text>
-      </Text>
+              <Text style={styles.redirect}>
+                Ya tienes una cuenta? {`${' '}`}
+                <Text 
+                  style={styles.redirectStrong}
+                  onPress={() => navigation.navigate('Login')}
+                >
+                  iniciar sesion
+                </Text>
+              </Text>
 
-      <Button 
-        title='Login'
-        onPress={() => handleLogin()}
-      />
+              <Button 
+                title='Login'
+                onPress={() => handleLogin()}
+              />
+            </>
+          )
+      }
       <StatusBar style="auto" />
     </View>
   );

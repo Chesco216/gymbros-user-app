@@ -4,20 +4,23 @@ import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from './sevices/auth';
 import { useUser } from '../../store/useUser';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../FirebaseConfig';
 
 export const Login = ({navigation}) => {
 
   const [email, setEmail] = useState()
   const [pass, setPass] = useState()
 
+  // const user = useUser(state => state.user)
+  // if (user.uid) navigation.navigate('Home')
+
+
   const setUser = useUser(state => state.set_User)
   const handleLogin = async() => {
     const user = await login(email, pass)
-    setUser({
-      user: user.name,
-      email: user.email,
-      isActive: false
-    })
+    const userToSet = await getDoc(doc(db, 'user', user.uid))
+    setUser(userToSet)
     console.log({user})
     navigation.navigate('Home')
   }
