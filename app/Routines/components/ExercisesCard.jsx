@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native"
 
-export const ExercisesCard = () => {
+export const ExercisesCard = ({day}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.day}>Lunes</Text>
@@ -31,16 +31,16 @@ export const ExercisesCard = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '85%',
+    width: '100vw',
     paddingTop: 20,
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'black',
-    borderRadius: 20,
+    // borderWidth: 2,
+    // borderColor: 'black',
+    // borderRadius: 20,
     marginBottom: 30
   },
   exercises: {

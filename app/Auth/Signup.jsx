@@ -60,6 +60,7 @@ export const Signup = ({navigation}) => {
                 placeholder='contraseña'
                 value={pass}
                 onChangeText={text => setPass(text)}
+                textContentType='password'
               />
 
               <Text style={styles.redirect}>
