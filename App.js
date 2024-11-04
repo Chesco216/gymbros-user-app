@@ -7,6 +7,7 @@ import { Signup } from './app/Auth/Signup';
 import { Profile } from './app/Profile/Profile';
 import { Routines } from './app/Routines/Routines';
 import { Advices } from './app/Advices/Advices';
+import { Payment } from './app/Profile/Payment';
 
 export default function App() {
 
@@ -20,6 +21,7 @@ export default function App() {
           <Stack.Screen name='Login' component={Login}/>
           <Stack.Screen name='Home' component={Home}/>
           <Stack.Screen name='Profile' component={Profile}/>
+          <Stack.Screen name='Pagos' component={Payment}/>
           <Stack.Screen name='Routines' component={Routines}/>
           <Stack.Screen name='Advices' component={Advices}/>
         </Stack.Navigator>
