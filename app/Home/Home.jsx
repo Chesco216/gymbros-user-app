@@ -4,6 +4,7 @@ import { useUser } from "../../store/useUser"
 import { useState, useEffect } from "react"
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../FirebaseConfig";
+import { colors } from "../../constants/colors";
 
 export const Home = ({navigation}) => {
 
@@ -53,13 +54,15 @@ export const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.light,
     alignItems: 'center',
     justifyContent: 'center',
   },
   option: {
     width: '90%',
     textAlign: 'center',
+    color: colors.light,
+    backgroundColor: colors.lightbrown,
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 10,

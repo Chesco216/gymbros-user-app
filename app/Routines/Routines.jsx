@@ -1,47 +1,56 @@
 import { Button, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { ExercisesCard } from "./components/ExercisesCard"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDay } from "./store/useDay"
+import { getRoutine } from "./services/getRoutine"
+import { useUser } from "../../store/useUser"
 
 export const Routines = () => {
 
-  const [days, setDays] = useState([
-    'lunes', 
-    'martes',
-    'miercoles',
-    'jueves',
-    'viernes',
-  ])
-  const [day, setDay] = useState('lunes')
+  const [routine, setRoutine] = useState([])
+  const user = useUser(state => state.user)
+
+  useEffect(() => {
+    getRoutine(user.uid).then(r => setRoutine(r))
+  },[])
+
   const dayOpt = useDay(state => state.day_opt)
   const setDayOpt = useDay(state => state.set_day_opt)
 
   console.log('me gusta el pene')
   return (
     <View style={styles.container}>
-      <View style={styles.days}>
-        {
-          days.map((item) => 
-            <Pressable 
-              key={item}
-              onPress={() => {
-                setDay(item)
-                setDayOpt(item)
-              }}
-            >
-              <Text
-                style={(dayOpt == item) ? styles.dayBtnCB : styles.dayBtn}
-              >{item}</Text>
-            </Pressable>
-          )
-        }
-      </View>
-      <ScrollView style={{flex: 1, width: '100%'}}>
-        <ExercisesCard day={day}/>
-      </ScrollView>
-      <Button
-        title="Generar nueva rutina"
-      />
+      {
+        (routine) &&
+          <>
+            <View style={styles.days}>
+              {
+                routine.map((item) => 
+                  <Pressable 
+                    key={item.day}
+                    onPress={() => {
+                      setDayOpt(item.day)
+                    }}
+                  >
+                    <Text
+                      style={(dayOpt == item.day) ? styles.dayBtnCB : styles.dayBtn}
+                    >{item.day}</Text>
+                  </Pressable>
+                )
+              }
+            </View>
+            <ScrollView style={{flex: 1, width: '100%'}}>
+              {
+                routine.map((item) => {
+                  if(item.day == dayOpt) return <ExercisesCard day={item}/>
+                })
+              }
+            </ScrollView>
+            <Button
+              title="Generar nueva rutina"
+            />
+          </>
+      }
     </View>
   )
 }

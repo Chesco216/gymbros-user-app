@@ -1,26 +1,15 @@
-import { BackHandler, Button, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from "../../store/useUser"
-import { useEffect, useState } from "react"
-import { doc, getDoc } from "firebase/firestore"
-import { db } from "../../FirebaseConfig"
+import { useState } from "react"
+import { colors } from "../../constants/colors";
+import { UpdateForm } from "./components/UpdateForm";
 
 export const Profile = ({navigation}) => {
 
   const user = useUser(state => state.user)
-  // const set_user = useUser(state => state.set_user)
 
-  // const [uid, setUid] = useState()
-  //
-  // AsyncStorage.getItem('user')
-  //   .then(id => setUid(id.replaceAll('"', '')))
-  
-  // useEffect(() => {
-  //   if(uid) {
-  //     getDoc(doc(db, 'user', uid))
-  //       .then(doc => set_user(doc.data()))
-  //   }
-  // }, [uid])
+  const [update, setUpdate] = useState(false)
 
   const logout = () => {
     AsyncStorage.clear()
@@ -29,40 +18,57 @@ export const Profile = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.subContainer}>
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Nombre</Text>
-          <Text style={styles.info}>{user.name}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Correo</Text>
-          <Text style={styles.info}>{user.email}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Edad</Text>
-          <Text style={styles.info}>{user.age}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Telefono</Text>
-          <Text style={styles.info}>{user.phone}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Peso</Text>
-          <Text style={styles.info}>{user.weight}</Text>
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>Altura</Text>
-          <Text style={styles.info}>{user.height}</Text>
-        </View>
-      </View>
-      <Button
-        title="Actualizar Datos"
-        onPress={() => handlePress()}
-      />
-      <Button
-        title="Cerrar sesion"
-        onPress={() => logout()}
-      />
+      {
+        (!update) &&
+          <>
+            <View style={styles.scrollViewContainer}>
+              <ScrollView style={styles.subContainer}>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>Nombre</Text>
+                  <Text style={styles.info}>{user.name}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>Correo</Text>
+                  <Text style={styles.info}>{user.email}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>Edad</Text>
+                  <Text style={styles.info}>{user.age}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>Telefono</Text>
+                  <Text style={styles.info}>{user.phone}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>Peso</Text>
+                  <Text style={styles.info}>{user.weight}</Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <Text style={styles.title}>Altura</Text>
+                  <Text style={styles.info}>{user.height}</Text>
+                </View>
+              </ScrollView>
+              </View>
+              <View style={styles.btnContainer}>
+                <Pressable
+                  style={styles.btn}
+                  onPress={() => setUpdate(!update)}
+                >
+                  <Text style={styles.btnText}>Actualizar Datos</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.btn}
+                  onPress={() => logout()}
+                >
+                  <Text style={styles.btnText}>Cerrar Sesion</Text>
+                </Pressable>
+              </View>
+          </>
+      }
+      {
+        (update) &&
+          <UpdateForm setUpdate={setUpdate} update={update}/>
+      }
     </View>
   )
 }
@@ -71,33 +77,66 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
+    backgroundColor: colors.light,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scrollViewContainer: {
+    flex: 1,
+    width: '100%',
+    height: 'fit-content',
+    flexDirection: 'column',
+    backgroundColor: colors.light,
     alignItems: 'center',
     justifyContent: 'center',
   },
   subContainer: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    width: '80%',
     borderWidth: 2,
     borderColor: 'black',
     borderRadius: 20,
-    marginBottom: 30
+    marginTop: 20,
   },
   infoContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     width: '85%',
     padding: 20,
-    paddingTop: 30,
-    paddingBottom: 30
+    paddingTop: 20,
+    paddingBottom: 20
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'semibold',
-    width: '30%'
+    width: '100%'
   },
   info: {
-    width: '70%',
+    color: colors.lightbrown,
+    paddingTop: 10,
+    width: '80%',
     fontSize: 20,
-    borderLeftWidth: 1,
-    borderLeftColor: 'black',
-    paddingLeft: 20
+  },
+  btnContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  btn: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  btnText: {
+    paddingTop: 10,
+    paddingRight: 15,
+    paddingBottom: 10,
+    paddingLeft: 15,
+    fontSize: 18,
+    backgroundColor: colors.darkbrown,
+    color: colors.light,
+    borderRadius: 10
   }
 })
