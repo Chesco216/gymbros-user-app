@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { signup } from './sevices/auth';
 import { useUser } from '../../store/useUser';
 import { UserForm } from './components/UserForm';
+import { colors } from '../../constants/colors';
 
 export const Signup = ({navigation}) => {
 
@@ -12,25 +14,27 @@ export const Signup = ({navigation}) => {
   const [pass, setPass] = useState()
   const [submited, setSubmited] = useState(false)
 
-  // const user = useUser(state => state.user)
-  // if (user.uid) navigation.navigate('Home')
- 
-  const setUser = useUser(state => state.set_User)
+  const set_user = useUser(state => state.set_user)
 
   const nav = navigation
   const handleLogin = async() => {
     const user = await signup(email, pass)
     console.log(user.uid)
-    setUser({
+    set_user({
       uid: user.uid,
       name: name,
       email: user.email,
       isActive: false
     })
-
-    console.log({user})
+    await AsyncStorage.setItem('user', user.uid)
     setSubmited(true)
   }
+
+  const [uid, setUid] = useState()
+  AsyncStorage.getItem('user')
+    .then(id => setUid(id.replaceAll('"', '')))
+
+  if(uid) navigation.navigate('Home')
 
   return (
     <View style={styles.container}>
@@ -73,10 +77,15 @@ export const Signup = ({navigation}) => {
                 </Text>
               </Text>
 
-              <Button 
-                title='Login'
+              <Pressable
+                style={styles.btn}
                 onPress={() => handleLogin()}
-              />
+              >
+                <Text style={styles.textBtn}>
+                  Registrar
+                </Text>
+              </Pressable>
+              
             </>
           )
       }
@@ -88,7 +97,7 @@ export const Signup = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.orange,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -103,6 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'left'
   },
   inp: {
+    backgroundColor: colors.light,
     fontSize: 18,
     padding: 15,
     borderWidth: 2,
@@ -116,5 +126,17 @@ const styles = StyleSheet.create({
   },
   redirectStrong: {
     fontWeight: 'bold'
+  },
+  btn: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: colors.darkbrown,
+    borderRadius: 10,
+  },
+  textBtn: {
+    fontSize: 20,
+    color: colors.light
   }
 });

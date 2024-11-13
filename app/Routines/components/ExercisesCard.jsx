@@ -81,6 +81,25 @@ export const ExercisesCard = ({ day }) => {
     </View>
   );
 };
+      <Text style={styles.day}>{day.day}</Text>
+      <Text>Calorias quemadas: {day.cals}</Text>
+      <Text>Duracion: {day.duration}</Text>
+      <Text>Ejercicios:</Text>
+      {
+        // day.exercises.map((item) => {
+        //   
+        // })
+        // deberia de mapearlo pero como que alguien la cago
+      }
+      <View style={styles.exercises}>
+        <Text>Set {day.exercises.set}</Text>
+        <Text>descripcion {day.exercises.description}</Text>
+        <Text>Series {day.exercises.series}</Text>
+        <Text>Repeticiones {day.exercises.reps}</Text>
+      </View>
+    </View> 
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

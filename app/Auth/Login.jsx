@@ -1,29 +1,27 @@
 
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { login } from './sevices/auth';
-import { useUser } from '../../store/useUser';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../FirebaseConfig';
+import { colors } from '../../constants/colors';
 
 export const Login = ({navigation}) => {
 
   const [email, setEmail] = useState()
   const [pass, setPass] = useState()
 
-  // const user = useUser(state => state.user)
-  // if (user.uid) navigation.navigate('Home')
-
-
-  const setUser = useUser(state => state.set_User)
   const handleLogin = async() => {
     const user = await login(email, pass)
-    const userToSet = await getDoc(doc(db, 'user', user.uid))
-    setUser(userToSet)
-    console.log({user})
+    await AsyncStorage.setItem('user', JSON.stringify(user.uid))
     navigation.navigate('Home')
   }
+
+  const [uid, setUid] = useState()
+  AsyncStorage.getItem('user')
+    .then(id => setUid(id.replaceAll('"', '')))
+
+  if(uid) navigation.navigate('Home')
 
   return (
     <View style={styles.container}>
@@ -54,10 +52,12 @@ export const Login = ({navigation}) => {
         </Text>
       </Text>
 
-      <Button 
-        title='Login'
+      <Pressable
+        style={styles.btn}
         onPress={() => handleLogin()}
-      />
+      >
+        <Text style={styles.textBtn}>Login</Text>
+      </Pressable>
       <StatusBar style="auto" />
     </View>
   );
@@ -66,7 +66,7 @@ export const Login = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.orange,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'left'
   },
   inp: {
+    backgroundColor: colors.light,
     fontSize: 18,
     padding: 15,
     borderWidth: 2,
@@ -94,5 +95,17 @@ const styles = StyleSheet.create({
   },
   redirectStrong: {
     fontWeight: 'bold'
+  },
+  btn: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: colors.darkbrown,
+    borderRadius: 10,
+  },
+  textBtn: {
+    fontSize: 20,
+    color: colors.light
   }
 });
