@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 20
   },
   subContainer: {
     paddingTop: 20,

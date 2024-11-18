@@ -1,23 +1,46 @@
-import { Button, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Alert, Button, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import { ExercisesCard } from "./components/ExercisesCard"
 import { useEffect, useState } from "react"
 import { useDay } from "./store/useDay"
 import { getRoutine } from "./services/getRoutine"
 import { useUser } from "../../store/useUser"
+import { getPrompt } from "./services/getPrompt"
+import { createRoutine } from "./services/createRoutine"
+import { doc, setDoc } from "firebase/firestore"
+import { db } from "../../FirebaseConfig"
 
 export const Routines = () => {
 
   const [routine, setRoutine] = useState([])
+  const [rID, setRID] = useState()
   const user = useUser(state => state.user)
 
   useEffect(() => {
-    getRoutine(user.uid).then(r => setRoutine(r))
+    getRoutine(user.uid).then(r => {
+      setRID(r.uid)
+      setRoutine(r.days)
+    })
   },[])
 
   const dayOpt = useDay(state => state.day_opt)
   const setDayOpt = useDay(state => state.set_day_opt)
 
-  console.log('me gusta el pene')
+  const handleCreateRoutine = async() => {
+    console.log('preseed')
+    const prompt = getPrompt(user, 'aun no hay informacion del gym')
+    try {
+      const res = await createRoutine(prompt)
+      await setDoc(doc(db, 'routines', rID), {
+        ...res,
+        uid: rID,
+        user_id: user.uid,
+        isAproved: false
+      })
+    } catch (error) {
+      Alert.alert(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       {
@@ -46,9 +69,12 @@ export const Routines = () => {
                 })
               }
             </ScrollView>
-            <Button
-              title="Generar nueva rutina"
-            />
+            <Pressable
+              style={styles.routineBtn}
+              onPress={() => handleCreateRoutine()}
+            >
+              <Text>Generar nueva rutina</Text>
+            </Pressable>
           </>
       }
     </View>
@@ -89,5 +115,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 5
+  },
+  routineBtn: {
+    marginBottom: 40
   }
 })
