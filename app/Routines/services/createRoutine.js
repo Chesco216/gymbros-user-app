@@ -7,18 +7,26 @@ export const createRoutine = async(prompt) => {
     const res = await fetch(url, {
       method: 'POST',
       headers: {
-        "Content-Type": "aplication/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [{
-          role: 'user',
+          role: 'system',
           content: prompt
         }]
       })
     })
+
+    const data = await res.json()
+    const message = data.choices[0].message.content
+
+    const routine = JSON.parse(message)
+    console.log({routine})
+    return routine
   } catch (error) {
-    Alert.alert(error.code)
+    console.log('error from function')
+    Alert.alert(JSON.stringify(error))
   }
 }

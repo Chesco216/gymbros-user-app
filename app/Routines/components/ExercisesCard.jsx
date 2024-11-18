@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native"
 
 export const ExercisesCard = ({day}) => {
+  console.log(day.exercises)
   return (
     <View style={styles.container}>
       <Text style={styles.day}>{day.day}</Text>
@@ -8,17 +9,15 @@ export const ExercisesCard = ({day}) => {
       <Text>Duracion: {day.duration}</Text>
       <Text>Ejercicios:</Text>
       {
-        // day.exercises.map((item) => {
-        //   
-        // })
-        // deberia de mapearlo pero como que alguien la cago
+        day.exercises.map((item) =>
+          <View style={styles.exercises}>
+            <Text>Set {item.set}</Text>
+            <Text>descripcion {item.description}</Text>
+            <Text>Series {item.series}</Text>
+            <Text>Repeticiones {item.reps}</Text>
+          </View>
+        )
       }
-      <View style={styles.exercises}>
-        <Text>Set {day.exercises.set}</Text>
-        <Text>descripcion {day.exercises.description}</Text>
-        <Text>Series {day.exercises.series}</Text>
-        <Text>Repeticiones {day.exercises.reps}</Text>
-      </View>
     </View> 
   )
 }
