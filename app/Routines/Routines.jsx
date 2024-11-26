@@ -63,19 +63,19 @@ export const Routines = () => {
                 )
               }
             </View>
-            <ScrollView style={{flex: 1, width: '100%'}}>
+            <ScrollView style={styles.scrollViewContainer}>
               {
                 routine.map((item) => {
                   if(item.day == dayOpt) return <ExercisesCard day={item}/>
                 })
               }
+              <Pressable
+                style={styles.routineBtn}
+                onPress={() => handleCreateRoutine()}
+              >
+                <Text style={styles.routineBtnText}>Generar nueva rutina</Text>
+              </Pressable>
             </ScrollView>
-            <Pressable
-              style={styles.routineBtn}
-              onPress={() => handleCreateRoutine()}
-            >
-              <Text style={styles.routineBtnText}>Generar nueva rutina</Text>
-            </Pressable>
           </>
       }
     </View>
@@ -90,6 +90,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+  },
+  scrollViewContainer: {
+    width: '100%',
+    flex: 1,
   },
   days: {
     display: 'flex',
@@ -118,10 +122,11 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   routineBtn: {
+    width: '50%',
     marginBottom: 40,
     padding: 15,
     backgroundColor: colors.lightbrown,
-    borderRadius: 10
+    borderRadius: 10,
   },
   routineBtnText: {
     fontSize: 20,
