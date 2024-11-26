@@ -8,6 +8,7 @@ import { getPrompt } from "./services/getPrompt"
 import { createRoutine } from "./services/createRoutine"
 import { doc, setDoc } from "firebase/firestore"
 import { db } from "../../FirebaseConfig"
+import { colors } from "../../constants/colors"
 
 export const Routines = () => {
 
@@ -73,7 +74,7 @@ export const Routines = () => {
               style={styles.routineBtn}
               onPress={() => handleCreateRoutine()}
             >
-              <Text>Generar nueva rutina</Text>
+              <Text style={styles.routineBtnText}>Generar nueva rutina</Text>
             </Pressable>
           </>
       }
@@ -95,28 +96,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'black',
+    color: colors.lightbrown,
     marginTop: 20,
   },
   dayBtnCB: {
-    backgroundColor: 'black',
+    backgroundColor: colors.lightbrown,
     color: 'white',
     padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: colors.lightbrown,
     borderRadius: 5
   },
   dayBtn: {
     backgroundColor: 'white',
-    color: 'black',
+    color: colors.lightbrown,
     padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: colors.lightbrown,
     borderRadius: 5
   },
   routineBtn: {
-    marginBottom: 40
-  }
+    marginBottom: 40,
+    padding: 15,
+    backgroundColor: colors.lightbrown,
+    borderRadius: 10
+  },
+  routineBtnText: {
+    fontSize: 20,
+    color: colors.light,
+    fontWeight: 'bold'
+}
 })

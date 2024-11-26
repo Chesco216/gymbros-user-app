@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 20,
     width: '80%',
-    borderWidth: 2,
-    borderColor: 'black',
-    borderRadius: 20,
+    // borderWidth: 2,
+    // borderColor: 'black',
+    // borderRadius: 20,
     marginTop: 20,
   },
   infoContainer: {
