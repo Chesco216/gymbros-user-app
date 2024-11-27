@@ -9,19 +9,24 @@ import { createRoutine } from "./services/createRoutine"
 import { doc, setDoc } from "firebase/firestore"
 import { db } from "../../FirebaseConfig"
 import { colors } from "../../constants/colors"
+import { WaitingForRoutine } from "./components/WaitingForRoutine"
 
 export const Routines = () => {
 
   const [routine, setRoutine] = useState([])
   const [rID, setRID] = useState()
   const user = useUser(state => state.user)
+  const [routineAproved, setRoutineAproved] = useState(false)
+  const [reloadRoutine, setReloadRoutine] = useState(false)
 
   useEffect(() => {
     getRoutine(user.uid).then(r => {
       setRID(r.uid)
       setRoutine(r.days)
+      setRoutineAproved(r)
     })
-  },[])
+    console.log('useEffec log')
+  },[reloadRoutine])
 
   const dayOpt = useDay(state => state.day_opt)
   const setDayOpt = useDay(state => state.set_day_opt)
@@ -37,6 +42,7 @@ export const Routines = () => {
         user_id: user.uid,
         isAproved: false
       })
+      setRoutineAproved(false)
     } catch (error) {
       Alert.alert(error)
     }
@@ -45,7 +51,7 @@ export const Routines = () => {
   return (
     <View style={styles.container}>
       {
-        (routine) &&
+        (routine && routineAproved) ?
           <>
             <View style={styles.days}>
               {
@@ -77,6 +83,8 @@ export const Routines = () => {
               </Pressable>
             </ScrollView>
           </>
+          :
+          <WaitingForRoutine reloadRoutine={reloadRoutine} setReloadRoutine={setReloadRoutine}/>
       }
     </View>
   )
@@ -122,13 +130,16 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   routineBtn: {
-    width: '50%',
+    marginHorizontal: 20,
+    boxSizing: 'border-box',
     marginBottom: 40,
     padding: 15,
     backgroundColor: colors.lightbrown,
     borderRadius: 10,
   },
   routineBtnText: {
+    width: '100%',
+    textAlign: 'center',
     fontSize: 20,
     color: colors.light,
     fontWeight: 'bold'
