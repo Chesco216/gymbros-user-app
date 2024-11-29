@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     borderRadius: 20,
     backgroundColor: colors.light,
+    overflow: 'hidden'
   },
   title: {
     marginTop: 20,
@@ -35,6 +36,6 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: '100%',
-    height: 300
+    height: 300,
   }
 })

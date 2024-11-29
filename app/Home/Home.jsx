@@ -25,25 +25,25 @@ export const Home = ({navigation}) => {
     <View style={styles.container}>
       <Text 
         style={styles.option}
-        onPress={() => navigation.navigate('Profile')}
+        onPress={() => navigation.navigate('Perfil')}
       >
         Perfil
       </Text>
       <Text 
         style={styles.option}
-        onPress={() => navigation.navigate('Routines')}
+        onPress={() => navigation.navigate('Rutinas')}
       >
         Rutinas
       </Text>
       <Text 
         style={styles.option}
-        onPress={() => navigation.navigate('Advices')}
+        onPress={() => navigation.navigate('Comunicados')}
       >
         Comunicados
       </Text>
       <Text 
         style={styles.option}
-        onPress={() => navigation.navigate('Pagos')}
+        onPress={() => navigation.navigate('Iscripcion')}
       >
         Inscripcion
       </Text>

@@ -10,6 +10,7 @@ import { doc, setDoc } from "firebase/firestore"
 import { db } from "../../FirebaseConfig"
 import { colors } from "../../constants/colors"
 import { WaitingForRoutine } from "./components/WaitingForRoutine"
+import { TwitterAuthProvider } from "firebase/auth"
 
 export const Routines = () => {
 
@@ -48,6 +49,8 @@ export const Routines = () => {
     }
   }
 
+  //FIX: when user id new he cant create a routine, it only renders the reload routine option
+
   return (
     <View style={styles.container}>
       {
@@ -84,7 +87,18 @@ export const Routines = () => {
             </ScrollView>
           </>
           :
-          <WaitingForRoutine reloadRoutine={reloadRoutine} setReloadRoutine={setReloadRoutine}/>
+            (routine == 'nr') ?
+            <>
+              <Text style={styles.text}>Parece que no tienes rutinas aun</Text>
+              <Pressable
+                style={styles.routineBtn}
+                onPress={() => handleCreateRoutine()}
+              >
+                <Text style={styles.routineBtnText}>Generar nueva rutina</Text>
+              </Pressable>
+            </>
+              :
+                <WaitingForRoutine reloadRoutine={reloadRoutine} setReloadRoutine={setReloadRoutine}/>
       }
     </View>
   )
@@ -143,5 +157,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.light,
     fontWeight: 'bold'
-}
+  },
+  text: {
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 20,
+    color: colors.darkbrown,
+    fontWeight: 'bold'
+  }
 })

@@ -7,6 +7,7 @@ export const getRoutine = async(user_id) => {
     const res = await getDoc(doc(db, 'routines', user_id))
     const data = res.data()
 
+    console.log({data})
     const routine = {
       days: [
         data.day_1,
@@ -17,7 +18,10 @@ export const getRoutine = async(user_id) => {
       ],
       uid: data.uid
     }
-    if (data.isAproved){
+    if(!data) {
+      return 'nr'
+    }
+    else if (data.isAproved){
       return routine
     } else {
       return null

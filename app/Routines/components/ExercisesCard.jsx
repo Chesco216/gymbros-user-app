@@ -15,9 +15,9 @@ export const ExercisesCard = ({day}) => {
       </View>
       <View style={styles.info}>
         <Svg width={50} height={50} viewBox="0 0 24 24" fill='none'>
-          <Path d="M5.06152 12C5.55362 8.05369 8.92001 5 12.9996 5C17.4179 5 20.9996 8.58172 20.9996 13C20.9996 17.4183 17.4179 21 12.9996 21H8M13 13V9M11 3H15M3 15H8M5 18H10" stroke={colors.lightbrown} stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <Path d="M5.06152 12C5.55362 8.05369 8.92001 5 12.9996 5C17.4179 5 20.9996 8.58172 20.9996 13C20.9996 17.4183 17.4179 21 12.9996 21H8M13 13V9M11 3H15M3 15H8M5 18H10" stroke={colors.lightbrown} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </Svg>
-        <Text style={styles.infoText}>{day.duration}</Text>
+        <Text style={styles.infoText}>{day.duration} min</Text>
       </View>
       {
         day.exercises.map((item) =>
