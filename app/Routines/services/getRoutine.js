@@ -16,16 +16,10 @@ export const getRoutine = async(user_id) => {
         data.day_4,
         data.day_5
       ],
-      uid: data.uid
+      uid: res.id
     }
-    if(!data) {
-      return 'nr'
-    }
-    else if (data.isAproved){
-      return routine
-    } else {
-      return null
-    }
+
+    return routine
   } catch (error) {
     Alert.alert(error.code)
   }

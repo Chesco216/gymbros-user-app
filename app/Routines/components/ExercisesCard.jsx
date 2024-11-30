@@ -3,7 +3,6 @@ import { colors } from "../../../constants/colors"
 import Svg, { Path } from 'react-native-svg'
 
 export const ExercisesCard = ({day}) => {
-  console.log(day.exercises)
   return (
     <View style={styles.container}>
       <Text style={styles.day}>{day.day}</Text>

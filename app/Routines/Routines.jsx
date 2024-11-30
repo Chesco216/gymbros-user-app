@@ -10,21 +10,18 @@ import { doc, setDoc } from "firebase/firestore"
 import { db } from "../../FirebaseConfig"
 import { colors } from "../../constants/colors"
 import { WaitingForRoutine } from "./components/WaitingForRoutine"
-import { TwitterAuthProvider } from "firebase/auth"
 
 export const Routines = () => {
 
   const [routine, setRoutine] = useState([])
-  const [rID, setRID] = useState()
   const user = useUser(state => state.user)
   const [routineAproved, setRoutineAproved] = useState(false)
   const [reloadRoutine, setReloadRoutine] = useState(false)
 
   useEffect(() => {
     getRoutine(user.uid).then(r => {
-      setRID(r.uid)
       setRoutine(r.days)
-      setRoutineAproved(r)
+      setRoutineAproved(r.isAproved)
     })
     console.log('useEffec log')
   },[reloadRoutine])
@@ -37,19 +34,17 @@ export const Routines = () => {
     const prompt = getPrompt(user, 'aun no hay informacion del gym')
     try {
       const res = await createRoutine(prompt)
-      await setDoc(doc(db, 'routines', rID), {
+      await setDoc(doc(db, 'routines', user.uid), {
         ...res,
-        uid: rID,
         user_id: user.uid,
         isAproved: false
       })
       setRoutineAproved(false)
+      setReloadRoutine(!reloadRoutine)
     } catch (error) {
       Alert.alert(error)
     }
   }
-
-  //FIX: when user id new he cant create a routine, it only renders the reload routine option
 
   return (
     <View style={styles.container}>
@@ -87,7 +82,7 @@ export const Routines = () => {
             </ScrollView>
           </>
           :
-            (routine == 'nr') ?
+            (routine.length == 0) ?
             <>
               <Text style={styles.text}>Parece que no tienes rutinas aun</Text>
               <Pressable
@@ -162,7 +157,8 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: 20,
-    color: colors.darkbrown,
-    fontWeight: 'bold'
+    color: 'black',
+    fontWeight: 'bold',
+    marginBottom: 20
   }
 })
