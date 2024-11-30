@@ -7,6 +7,7 @@ export const getRoutine = async(user_id) => {
     const res = await getDoc(doc(db, 'routines', user_id))
     const data = res.data()
 
+    console.log({data})
     const routine = {
       days: [
         data.day_1,
@@ -15,7 +16,7 @@ export const getRoutine = async(user_id) => {
         data.day_4,
         data.day_5
       ],
-      uid: data.uid
+      uid: res.id
     }
 
     return routine

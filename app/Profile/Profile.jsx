@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from "../../store/useUser"
 import { useState } from "react"
@@ -23,6 +23,9 @@ export const Profile = ({navigation}) => {
           <>
             <View style={styles.scrollViewContainer}>
               <ScrollView style={styles.subContainer}>
+                <View style={{display: 'flex', alignItems: 'center', width: '100%'}}>
+                  <Image style={styles.profilePic} source={{uri: `${user.profile_photo}`}}/>
+                </View>
                 <View style={styles.infoContainer}>
                   <Text style={styles.title}>Nombre</Text>
                   <Text style={styles.info}>{user.name}</Text>
@@ -97,9 +100,6 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 20,
     width: '80%',
-    borderWidth: 2,
-    borderColor: 'black',
-    borderRadius: 20,
     marginTop: 20,
   },
   infoContainer: {
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   btn: {
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 50,
+    marginTop: 30,
     marginBottom: 50,
   },
   btnText: {
@@ -139,5 +139,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.darkbrown,
     color: colors.light,
     borderRadius: 10
+  },
+  profilePic: {
+    width: 100,
+    height: 100,
+    borderRadius: 50
   }
 })

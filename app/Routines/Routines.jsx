@@ -8,19 +8,23 @@ import { getPrompt } from "./services/getPrompt"
 import { createRoutine } from "./services/createRoutine"
 import { doc, setDoc } from "firebase/firestore"
 import { db } from "../../FirebaseConfig"
+import { colors } from "../../constants/colors"
+import { WaitingForRoutine } from "./components/WaitingForRoutine"
 
 export const Routines = () => {
 
   const [routine, setRoutine] = useState([])
-  const [rID, setRID] = useState()
   const user = useUser(state => state.user)
+  const [routineAproved, setRoutineAproved] = useState(false)
+  const [reloadRoutine, setReloadRoutine] = useState(false)
 
   useEffect(() => {
     getRoutine(user.uid).then(r => {
-      setRID(r.uid)
       setRoutine(r.days)
+      setRoutineAproved(r.isAproved)
     })
-  },[])
+    console.log('useEffec log')
+  },[reloadRoutine])
 
   const dayOpt = useDay(state => state.day_opt)
   const setDayOpt = useDay(state => state.set_day_opt)
@@ -30,12 +34,13 @@ export const Routines = () => {
     const prompt = getPrompt(user, 'aun no hay informacion del gym')
     try {
       const res = await createRoutine(prompt)
-      await setDoc(doc(db, 'routines', rID), {
+      await setDoc(doc(db, 'routines', user.uid), {
         ...res,
-        uid: rID,
         user_id: user.uid,
         isAproved: false
       })
+      setRoutineAproved(false)
+      setReloadRoutine(!reloadRoutine)
     } catch (error) {
       Alert.alert(error)
     }
@@ -44,7 +49,7 @@ export const Routines = () => {
   return (
     <View style={styles.container}>
       {
-        (routine) &&
+        (routine && routineAproved) ?
           <>
             <View style={styles.days}>
               {
@@ -62,20 +67,33 @@ export const Routines = () => {
                 )
               }
             </View>
-            <ScrollView style={{flex: 1, width: '100%'}}>
+            <ScrollView style={styles.scrollViewContainer}>
               {
                 routine.map((item) => {
                   if(item.day == dayOpt) return <ExercisesCard day={item}/>
                 })
               }
+              <Pressable
+                style={styles.routineBtn}
+                onPress={() => handleCreateRoutine()}
+              >
+                <Text style={styles.routineBtnText}>Generar nueva rutina</Text>
+              </Pressable>
             </ScrollView>
-            <Pressable
-              style={styles.routineBtn}
-              onPress={() => handleCreateRoutine()}
-            >
-              <Text>Generar nueva rutina</Text>
-            </Pressable>
           </>
+          :
+            (routine.length == 0) ?
+            <>
+              <Text style={styles.text}>Parece que no tienes rutinas aun</Text>
+              <Pressable
+                style={styles.routineBtn}
+                onPress={() => handleCreateRoutine()}
+              >
+                <Text style={styles.routineBtnText}>Generar nueva rutina</Text>
+              </Pressable>
+            </>
+              :
+                <WaitingForRoutine reloadRoutine={reloadRoutine} setReloadRoutine={setReloadRoutine}/>
       }
     </View>
   )
@@ -90,33 +108,57 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
+  scrollViewContainer: {
+    width: '100%',
+    flex: 1,
+  },
   days: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'black',
+    color: colors.lightbrown,
     marginTop: 20,
   },
   dayBtnCB: {
-    backgroundColor: 'black',
+    backgroundColor: colors.lightbrown,
     color: 'white',
     padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: colors.lightbrown,
     borderRadius: 5
   },
   dayBtn: {
     backgroundColor: 'white',
-    color: 'black',
+    color: colors.lightbrown,
     padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: colors.lightbrown,
     borderRadius: 5
   },
   routineBtn: {
-    marginBottom: 40
+    marginHorizontal: 20,
+    boxSizing: 'border-box',
+    marginBottom: 40,
+    padding: 15,
+    backgroundColor: colors.lightbrown,
+    borderRadius: 10,
+  },
+  routineBtnText: {
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 20,
+    color: colors.light,
+    fontWeight: 'bold'
+  },
+  text: {
+    width: '100%',
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'black',
+    fontWeight: 'bold',
+    marginBottom: 20
   }
 })

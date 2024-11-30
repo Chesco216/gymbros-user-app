@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { ScrollView, StyleSheet, View } from "react-native"
 import { getPosts } from "./services/getPosts"
 import { PostCard } from "./components/PostCard"
+import { colors } from "../../constants/colors"
 
 export const Advices = () => {
 
@@ -14,6 +15,7 @@ export const Advices = () => {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       {
         (posts.length > 0) 
           && posts.map((item) => 
@@ -25,12 +27,14 @@ export const Advices = () => {
             />
           )
       }
+      </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.lightbrown,
     flex: 1
   }
 })
