@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState } from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { signup } from './sevices/auth';
 import { useUser } from '../../store/useUser';
 import { UserForm } from './components/UserForm';
 import { colors } from '../../constants/colors';
 
-export const Signup = ({navigation}) => {
-
+export const Signup = ({ navigation }) => {
   const [name, setName] = useState()
   const [email, setEmail] = useState()
   const [pass, setPass] = useState()

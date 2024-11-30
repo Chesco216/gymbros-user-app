@@ -6,11 +6,13 @@ import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-nati
 import { login } from './sevices/auth';
 import { colors } from '../../constants/colors';
 
-export const Login = ({navigation}) => {
+export const Login = ({ navigation }) => {
 
-  const [email, setEmail] = useState()
-  const [pass, setPass] = useState()
+	const [email, setEmail] = useState()
+	const [pass, setPass] = useState()
 
+	const setUser = useUser(state => state.set_User)
+	
   const handleLogin = async() => {
     const user = await login(email, pass)
     await AsyncStorage.setItem('user', JSON.stringify(user.uid))
