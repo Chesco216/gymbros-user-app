@@ -11,6 +11,6 @@ const initialState = {
 }
 
 export const useUser = create((set) => ({
-	user: '',
-	set_User: (user) => set({ user: user })
+  user: '',
+  set_user: (user) => set({user: user})
 }))
